@@ -1,9 +1,9 @@
 const axios = require('axios');
 const tinyurl = require('tinyurl');
 
-module.exports = {
-  config: {
+module.exports.config = {
     name: "4k",
+    usePrefix: false,
     aliases: ["4k", "remini"],
     version: "1.0",
     author: "JARiF",
@@ -13,10 +13,9 @@ module.exports = {
     category: "image",
     guide: {
       en: "{pn} reply to an image"
-    }
-  },
+    },
 
-  onStart: async function ({ message, args, event, api }) {
+  onStart: async function ({ api, event }) {
     const getImageUrl = () => {
       if (event.type === "message_reply") {
         const replyAttachment = event.messageReply.attachments[0];

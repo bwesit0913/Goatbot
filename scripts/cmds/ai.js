@@ -1,61 +1,48 @@
 const axios = require('axios');
+const fs = require('fs-extra');
 
-const GPT_API_URL = 'https://sandipapi.onrender.com/gpt';
-const PREFIXES = ['ai'];
-const horizontalLine = "━━━━━━━━━━━━━━━";
-
-module.exports = {
-  config: {
-    name: "ai",
-    version: 1.0,
-    author: "OtinXSandip",
-    longDescription: "AI",
-    category: "ai",
-    guide: {
-      en: "{p} questions",
-    },
-  },
-  onStart: async function () {
-    // Initialization logic if needed
-  },
-  onChat: async function ({ api, event, args, message }) {
-    try {
-      const prefix = PREFIXES.find((p) => event.body && event.body.toLowerCase().startsWith(p));
-
-      if (!prefix) {
-        return; // Invalid prefix, ignore the command
-      }
-
-      const prompt = event.body.substring(prefix.length).trim();
-
-      if (!prompt) {
-        const defaultMessage = getCenteredHeader("𝙼𝚘𝚌𝚑𝚊 | 🧋✨") + "\n" + horizontalLine + "\nHello! Ask me anything!\n" + horizontalLine;
-        await message.reply(defaultMessage);
-        return;
-      }
-
-      const answer = await getGPTResponse(prompt);
-
-      // Adding header and horizontal lines to the answer
-      const answerWithHeader = getCenteredHeader("𝙼𝚘𝚌𝚑𝚊 | 🧋✨") + "\n" + horizontalLine + "\n" + answer + "\n" + horizontalLine;
-      
-      await message.reply(answerWithHeader);
-    } catch (error) {
-      console.error("Error:", error.message);
-      // Additional error handling if needed
-    }
-  }
+module.exports.config = {
+  name: "remini",
+  version: "2.2",
+  hasPermssion: 0,
+  credits: "Hazeyy",
+  description: "( 𝚁𝚎𝚖𝚒𝚗𝚒 )",
+  commandCategory: "𝚗𝚘 𝚙𝚛𝚎𝚏𝚒𝚡",
+  usages: "( 𝙴𝚗𝚌𝚑𝚊𝚗𝚌𝚎 𝙸𝚖𝚊𝚐𝚎𝚜 )",
+  cooldowns: 2,
 };
 
-function getCenteredHeader(header) {
-  const totalWidth = 32; // Adjust the total width as needed
-  const padding = Math.max(0, Math.floor((totalWidth - header.length) / 2));
-  return " ".repeat(padding) + header;
-}
+module.exports.handleEvent = async function ({ api, event }) {
+  if (!(event.body.indexOf("remini") === 0 || event.body.indexOf("Remini") === 0)) return;
+  const args = event.body.split(/\s+/);
+  args.shift();
 
-async function getGPTResponse(prompt) {
-  // Implement caching logic here
+  const pathie = __dirname + `/cache/zombie.jpg`;
+  const { threadID, messageID } = event;
 
-  const response = await axios.get(`${GPT_API_URL}?prompt=${encodeURIComponent(prompt)}`);
-  return response.data.answer;
-}
+  const photoUrl = event.messageReply.attachments[0] ? event.messageReply.attachments[0].url : args.join(" ");
+
+  if (!photoUrl) {
+    api.sendMessage("📸 𝙿𝚕𝚎𝚊𝚜𝚎 𝚛𝚎𝚙𝚕𝚢 𝚝𝚘 𝚊 𝚙𝚑𝚘𝚝𝚘 𝚝𝚘 𝚙𝚛𝚘𝚌𝚎𝚎𝚍 𝚎𝚗𝚑𝚊𝚗𝚌𝚒𝚗𝚐 𝚒𝚖𝚊𝚐𝚎𝚜.", threadID, messageID);
+    return;
+  }
+
+  api.sendMessage("🕟 | 𝙴𝚗𝚑𝚊𝚗𝚌𝚒𝚗𝚐, 𝙿𝚕𝚎𝚊𝚜𝚎 𝚠𝚊𝚒𝚝 𝚏𝚘𝚛 𝚊 𝚖𝚘𝚖𝚎𝚗𝚝..", threadID, async () => {
+    try {
+      const response = await axios.get(`https://www.api.vyturex.com/upscale?imageUrl=${shortUrl}`);
+      const resultUrl = response.data.resultUrl;
+      const img = (await axios.get(processedImageURL, { responseType: "arraybuffer" })).data;
+
+      fs.writeFileSync(pathie, Buffer.from(img, 'binary'));
+
+      api.sendMessage({
+        body: "✨ 𝙴𝚗𝚑𝚊𝚗𝚌𝚎𝚍 𝚂𝚞𝚌𝚌𝚎𝚜𝚜𝚏𝚞𝚕𝚕𝚢",
+        attachment: fs.createReadStream(pathie)
+      }, threadID, () => fs.unlinkSync(pathie), messageID);
+    } catch (error) {
+      api.sendMessage(`🚫 𝙴𝚛𝚛𝚘𝚛 𝚙𝚛𝚘𝚌𝚎𝚜𝚜𝚒𝚗𝚐 𝚒𝚖𝚊𝚐𝚎: ${error}`, threadID, messageID);
+    }
+  });
+};
+
+module.exports.run = async function ({ api, event }) {};

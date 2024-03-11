@@ -1,9 +1,9 @@
 const axios = require('axios');
 const tinyurl = require('tinyurl');
 
-module.exports.config = {
+module.exports = {
+  config: {
     name: "4k",
-    usePrefix: false,
     aliases: ["4k", "remini"],
     version: "1.0",
     author: "JARiF",
@@ -13,9 +13,10 @@ module.exports.config = {
     category: "image",
     guide: {
       en: "{pn} reply to an image"
-    },
+    }
+  },
 
-  onStart: async function ({ api, event }) {
+  onStart: async function ({ message, args, event, api }) {
     const getImageUrl = () => {
       if (event.type === "message_reply") {
         const replyAttachment = event.messageReply.attachments[0];
@@ -35,12 +36,12 @@ module.exports.config = {
       const imageUrl = await getImageUrl();
       const shortUrl = await tinyurl.shorten(imageUrl);
 
-      message.reply("ƪ⁠(⁠‾⁠.⁠‾⁠“⁠)⁠┐ | Please wait...");
+      message.reply(" 🔁 enchant chasing | Please wait...");
 
       const response = await axios.get(`https://www.api.vyturex.com/upscale?imageUrl=${shortUrl}`);
       const resultUrl = response.data.resultUrl;
 
-      message.reply({ body: "<⁠(⁠￣⁠︶⁠￣⁠)⁠> | Image Enhanced.", attachment: await global.utils.getStreamFromURL(resultUrl) });
+      message.reply({ body: " ✅ | Image Enhanced.", attachment: await global.utils.getStreamFromURL(resultUrl) });
     } catch (error) {
       message.reply("┐⁠(⁠￣⁠ヘ⁠￣⁠)⁠┌ | Error: " + error.message);
       // Log error for debugging: console.error(error);

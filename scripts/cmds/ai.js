@@ -83,7 +83,7 @@ const a = {
   name: "ai",
   aliases: ["chatgpt"],
   version: "3.0",
-  author: "kshitiz",
+  author: "vex_kshitiz",
   countDown: 5,
   role: 0,
   longDescription: "Chat with GPT-4",

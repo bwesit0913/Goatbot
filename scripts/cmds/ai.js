@@ -82,7 +82,7 @@ async function kshitiz(api, event, args, message) {
 const a = {
   name: "ai",
   aliases: ["chatgpt"],
-  usePrefix: false,
+  usePrefix: true,
   version: "3.0",
   author: "vex_kshitiz",
   countDown: 5,

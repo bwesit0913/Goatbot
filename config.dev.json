@@ -20,8 +20,8 @@
     "100086689301511"
   ],
   "whiteListMode": {
-    "enable": true,
-    "whiteListIds": [100086689301511],
+    "enable": false,
+    "whiteListIds": [],
     "notes": "if you enable this feature, only the ids in the whiteListIds section can use the bot"
   },
   "nickNameBot": "VIP AI | 🧋✨",

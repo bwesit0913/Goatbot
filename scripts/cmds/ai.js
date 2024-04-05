@@ -160,7 +160,7 @@ async function l({ api, message, event, args }) {
     }
   } catch (t) {
     console.error("Error:", t.message);
-    message.reply("An error occurred while processing the request.");
+    message.reply("Maintenance.");
   }
 }
 
@@ -177,7 +177,7 @@ async function drawImage(message, prompt) {
     });
   } catch (w) {
     console.error("Error:", w.message);
-    message.reply("An error occurred while processing the request.");
+    message.reply("Maintenance.");
   }
 }
 

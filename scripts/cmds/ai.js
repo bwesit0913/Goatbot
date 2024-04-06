@@ -193,7 +193,7 @@ const a = {
   aliases: ["bard"],
   version: "4.0",
   author: "vex_kshitiz",
-  countDown: 5,
+  countDown: 1,
   role: 0,
   longDescription: "Chat with gemini",
   category: "ai",
